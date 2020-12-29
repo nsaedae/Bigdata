@@ -10,14 +10,14 @@ parsing
 import requests as req
 from bs4 import BeautifulSoup as bs
 
-# HTML 요청
-response = req.get('https://news.daum.net/')
+# HTML 요청(Anti-Crawling 적용)
+response = req.get('https://news.naver.com/', headers={'User-Agent':'Mozilla/5.0'})
 
 # HTML 파싱
 dom = bs(response.text, 'html.parser')
-titles = dom.select('.list_issue .tit_thumb > a')
+titles = dom.select('#today_main_news > div.hdline_news div.hdline_article_tit > a')
 
-# 데이터 출력
+# 데이터 출력(strip() : 공백제거)
 for tit in titles:
-    print(tit.text)
+    print(tit.text.strip())
 

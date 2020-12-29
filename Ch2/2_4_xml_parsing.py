@@ -16,6 +16,6 @@ foods = dom.select('breakfast_menu > food')
 # 데이터 출력
 for food in foods:
     print('---------------')
-    print('이름 : ', food.name)
+    print('이름 : ', food.findChildren()[0].text)
     print('가격 : ', food.price.text)
     print('열량 : ', food.calories.text)
