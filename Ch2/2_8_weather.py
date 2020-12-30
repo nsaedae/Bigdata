@@ -3,13 +3,17 @@
 이름 : 김철학
 내용 : 파이썬 기상청 날씨 데이터 수집하기
 """
-
+import os
 import requests as req
 from bs4 import BeautifulSoup as bs
 from datetime import datetime
 from selenium import webdriver
 
-browser = webdriver.Chrome('./chromedriver.exe')
+chrome_option = webdriver.ChromeOptions()
+chrome_option.add_argument('--headless')
+chrome_option.add_argument('--no-sandbox')
+chrome_option.add_argument('--disable-dev-shm-usage')
+browser = webdriver.Chrome('./chromedriver.exe', options=chrome_option)
 browser.implicitly_wait(3)
 
 browser.get('https://www.weather.go.kr/w/weather/now.do')
@@ -17,10 +21,16 @@ browser.implicitly_wait(3)
 
 trs = browser.find_elements_by_css_selector('#sfc-city-weather > div.cont-box02 > div > div.cont02 > div > table > tbody > tr')
 
+# 디렉터리 생성
+dir = "./weather/{:%Y-%m-%d}".format(datetime.now())
+
+if not os.path.exists(dir):
+    os.makedirs(dir)
+
 
 # 파일 저장
 fname = "{:%y-%m-%d-%H-%M.txt}".format(datetime.now())
-file = open('./weather/'+fname, mode='w', encoding='utf-8')
+file = open(dir+'/'+fname, mode='w', encoding='utf-8')
 
 file.write('지점,현재일기,시정,운량,중하운량,현재기온,이슬점온도,체감온도,일강수,적설,습도,풍향,풍속,해면기압\n')
 
@@ -48,4 +58,6 @@ file.close()
 # 브라우저 종료
 browser.close()
 browser.quit()
+
+print('날씨 데이터 수집완료')
 
