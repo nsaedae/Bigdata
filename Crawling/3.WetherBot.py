@@ -17,13 +17,11 @@ html = req.get('https://www.weather.go.kr/w/obs-climate/land/city-obs.do').text
 dom = bs(html, 'html.parser')
 #print(dom)
 
-
 # 파일 디렉터리 생성
 dir = "./weather/{:%Y-%m-%d}".format(datetime.now())
 
 if not os.path.exists(dir):
     os.makedirs(dir)
-
 
 # 파일 생성 및 데이터 파싱
 fname = "{:%Y-%m-%d-%H-%M.csv}".format(datetime.now())
@@ -31,9 +29,8 @@ file = open(dir+'/'+fname, 'w', encoding='utf-8')
 
 trs = dom.select('#weather_table > tbody > tr')
 for tr in trs:
-
     t1 = tr.findChildren('td')[0].a.text
-    t2 = tr.findChildren('td')[1].text
+    t2 = tr.findChildren('td')[1].text.st
     t3 = tr.findChildren('td')[2].text
     t4 = tr.findChildren('td')[3].text
     t5 = tr.findChildren('td')[4].text
@@ -48,7 +45,6 @@ for tr in trs:
     t14 = tr.findChildren('td')[13].text
 
     file.write('{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n'.format(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14))
-
 
 file.close()
 print('데이터 수집 완료...')
