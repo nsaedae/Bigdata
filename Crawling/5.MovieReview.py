@@ -13,10 +13,11 @@ import time
 browser = webdriver.Chrome('./chromedriver.exe')
 
 rank = 1
+page = 1
 
 while True:
     # 네이버 영화 랭킹 이동
-    browser.get('https://movie.naver.com/movie/sdb/rank/rmovie.naver?sel=pnt')
+    browser.get('https://movie.naver.com/movie/sdb/rank/rmovie.naver?sel=pnt&page=%d' % page)
 
     # 영화 제목 클릭
     tag_a_titles = browser.find_elements(By.CSS_SELECTOR, '#old_content > table > tbody > tr > td.title > div > a')
@@ -48,15 +49,19 @@ while True:
             tag_a_next = browser.find_element(By.CSS_SELECTOR, 'body > div > div > div.paging > div > a.pg_next')
             tag_a_next.click()
         except:
-            rank += 1  # 다음 순위 영화
             break
 
 
+    # 다음 순위 영화
+    rank += 1
 
+    if rank > page * 50:
+        # 랭킹 페이지 다음버튼 클릭
+        page += 1
 
-# 랭킹 페이지 다음버튼 클릭
-tag_a_rank_next = browser.find_element(By.CSS_SELECTOR, '#old_content > div.pagenavigation > table > tbody > tr > td.next > a')
-tag_a_rank_next.click()
+        if page > 40:
+            # 최종 종료
+            break
 
 
 print('종료....')
