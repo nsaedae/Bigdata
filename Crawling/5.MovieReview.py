@@ -12,19 +12,15 @@ import time
 # 가상 브라우저 실행
 browser = webdriver.Chrome('./chromedriver.exe')
 
-# 네이버 영화 랭킹 이동
-browser.get('https://movie.naver.com/movie/sdb/rank/rmovie.naver?sel=pnt')
-
-# 영화 제목 클릭
 rank = 1
 
 while True:
+    # 네이버 영화 랭킹 이동
+    browser.get('https://movie.naver.com/movie/sdb/rank/rmovie.naver?sel=pnt')
+
+    # 영화 제목 클릭
     tag_a_titles = browser.find_elements(By.CSS_SELECTOR, '#old_content > table > tbody > tr > td.title > div > a')
     tag_a_titles[rank-1].click()
-    """
-    for tag in tag_a_titles:
-        print(tag.text)
-    """
 
     # 영화 평점 클릭
     tag_a_tab5 = browser.find_element(By.CSS_SELECTOR, '#movieEndTabMenu > li:nth-child(5) > a')
@@ -42,7 +38,7 @@ while True:
         tag_lis = browser.find_elements(By.CSS_SELECTOR, 'body > div > div > div.score_result > ul > li')
         for li in tag_lis:
             score = li.find_element(By.CSS_SELECTOR, '.star_score > em').text
-            reple = li.find_element(By.CSS_SELECTOR, '.score_reple > p > span').text
+            reple = li.find_element(By.CSS_SELECTOR, '.score_reple > p > span:last-child').text
 
             print('{},{},{},{}'.format(count, title, reple, score))
             count += 1
@@ -52,9 +48,15 @@ while True:
             tag_a_next = browser.find_element(By.CSS_SELECTOR, 'body > div > div > div.paging > div > a.pg_next')
             tag_a_next.click()
         except:
-            rank += 1 # 다음 순위 영화
+            rank += 1  # 다음 순위 영화
             break
 
+
+
+
+# 랭킹 페이지 다음버튼 클릭
+tag_a_rank_next = browser.find_element(By.CSS_SELECTOR, '#old_content > div.pagenavigation > table > tbody > tr > td.next > a')
+tag_a_rank_next.click()
 
 
 print('종료....')
