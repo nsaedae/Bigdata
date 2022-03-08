@@ -32,6 +32,8 @@ options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
+# headless탐지 방지를 위해 UA를 임의로 설정(이거 안하면 Centos에서 에러남)
+options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)")
 
 browser = webdriver.Chrome('./chromedriver.exe', options=options)
 logger.info('가상 브라우저 실행...')
