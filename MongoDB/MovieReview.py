@@ -27,8 +27,13 @@ log_handler = logging.FileHandler('./movie_review.log')
 log_handler.setFormatter(formatter)
 logger.addHandler(log_handler)
 
-# 가상 브라우저 실행
-browser = webdriver.Chrome('./chromedriver.exe')
+# 가상 브라우저 실행(헤드리스 모드)
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+
+browser = webdriver.Chrome('./chromedriver.exe', options=options)
 logger.info('가상 브라우저 실행...')
 
 rank = 1
@@ -66,8 +71,8 @@ while True:
             score = li.find_element(By.CSS_SELECTOR, '.star_score > em').text
             reple = li.find_element(By.CSS_SELECTOR, '.score_reple > p > span:last-child').text
 
-            #print('{},{},{},{}'.format(count, title, reple, score))
-            collection.insert_one({'count':count, 'title':title, 'reple':reple, 'score':score})
+            print('{},{},{},{}'.format(count, title, reple, score))
+            #collection.insert_one({'count':count, 'title':title, 'reple':reple, 'score':score})
             logger.info('{},{}'.format(count, title))
             count += 1
 
